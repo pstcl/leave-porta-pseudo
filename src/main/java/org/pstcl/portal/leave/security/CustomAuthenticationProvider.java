@@ -4,6 +4,8 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.pstcl.portal.leave.util.GlobalProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +22,8 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 	
+	@Autowired
+	private GlobalProperties globalProperties;
 	
 	private RestTemplate restTemplate;
 
@@ -60,37 +64,14 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	public Boolean authorizeEmployee(String empid, String employeePassword)
 	{
 		Boolean authenticated=false;
-		
-		String username = "api_pstcl";
-		String password = "amritsarpatiala";
-		
 
-		String url = "https://hrapipstcl.pspcl.in/api/EmployeeAuthenticate";
-		String apiCredential = "Basic " + username + ":" + password + ":" + empid + ":" + employeePassword;
-		//    
-
-		// create headers
-		HttpHeaders headers = new HttpHeaders();
-		// set `accept` header
+		String url = globalProperties.getServer()+globalProperties.getAuthenticationUrl(); 
+		String apiCredential = "Basic " + globalProperties.getApiUsername() + ":" + globalProperties.getApiPassword() + ":" + empid + ":" + employeePassword;
+			HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-		// set custom header
 		headers.set("Authorization", apiCredential);
-
-		// build the request
 		HttpEntity<String> entity = new HttpEntity<>("body", headers);
-
-
-		//		 ResponseEntity<Post> response = this.restTemplate.exchange(url, HttpMethod.GET, entity, Post.class, 1);
-		//	        if (response.getStatusCode() == HttpStatus.OK) {
-		//	            return response.getBody();
-		//	        } else {
-		//	            return null;
-		//	        }
-
 		ResponseEntity<String> response= restTemplate.exchange(url,HttpMethod.GET,entity,String.class,0);
-
-
-
 		if(response.getBody().toUpperCase().equalsIgnoreCase("TRUE"))
 		{
 			authenticated=true;
