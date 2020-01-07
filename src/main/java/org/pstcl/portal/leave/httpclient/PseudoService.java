@@ -41,6 +41,15 @@ public class PseudoService {
 	org.slf4j.Logger logger=org.slf4j.LoggerFactory.getLogger(PseudoService.class);
 
 
+	
+	private HttpEntity<String> prepareHeaders(HttpServletRequest request) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+		headers.set("Authorization", request.getHeader("ServerAuthorization"));
+		HttpEntity<String> entity = new HttpEntity<>("body", headers);
+		return entity;
+	}
+	
 
 
 	public ResponseEntity<String> authorizeEmployee(HttpServletRequest request)
@@ -52,13 +61,7 @@ public class PseudoService {
 		ResponseEntity<String> response= restTemplate.exchange(url,HttpMethod.GET,entity,String.class,0);
 		return response;
 	}
-	private HttpEntity<String> prepareHeaders(HttpServletRequest request) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-		headers.set("Authorization", request.getHeader("Authorization"));
-		HttpEntity<String> entity = new HttpEntity<>("body", headers);
-		return entity;
-	}
+
 	public ResponseEntity<String>  employeeDetails(String employeCode, HttpServletRequest request)
 	{
 		String url = "https://hrapipstcl.pspcl.in/api/employee/{empid}";
