@@ -26,7 +26,7 @@ public class HTTPController {
 	
 	@CrossOrigin(allowCredentials="true")
 	@GetMapping(value = "/api/EmployeeAuthenticate") 
-	public Object authorizeEmployee()
+	public ResponseEntity<String> authorizeEmployee()
 	{
 		return httpService.authorizeEmployee(); 
 	}
@@ -34,14 +34,14 @@ public class HTTPController {
 	
 	@CrossOrigin(allowCredentials="true")
 	@GetMapping(value = "/api/employee/{empid}",  produces = "application/json") 
-	public  ResponseEntity<String>  getEmployee(@PathVariable("employeCode") String employeCode,HttpServletResponse response,HttpServletRequest request) {
+	public  ResponseEntity<String>  getEmployee(@PathVariable("empid") String employeeCode,HttpServletResponse response,HttpServletRequest request) {
 		
-		return httpService.employeeDetails(employeCode);
+		return httpService.employeeDetails(employeeCode);
 	}
 	
 	@CrossOrigin(allowCredentials="true")
 	@GetMapping(value = "/api/ddo/{ddocode}",  produces = "application/json") 
-	public  ResponseEntity<String>  getDdo(@PathVariable("ddoCode") String ddoCode,HttpServletResponse response,HttpServletRequest request) {
+	public  ResponseEntity<String>  getDdo(@PathVariable("ddocode") String ddoCode,HttpServletResponse response,HttpServletRequest request) {
 		
 		return httpService.ddoDetails(ddoCode);
 	}
